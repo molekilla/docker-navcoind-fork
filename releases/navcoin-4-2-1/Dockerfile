@@ -9,7 +9,7 @@ ARG NAV_PKG=navcoin-${NAVCOIN_VERSION}-x86_64-linux-gnu.tar.gz
 
 #install the libs needed
 RUN apt-get update -y
-RUN apt-get install wget -y
+RUN apt-get install ntp wget -y
 RUN apt-get install libcurl4-openssl-dev -y
 
 WORKDIR /tmp
@@ -23,10 +23,11 @@ RUN tar -xzf ${NAV_PKG}
 # move navcoind
 WORKDIR /tmp/navcoin-${NAVCOIN_VERSION}/bin
 RUN cp navcoind /bin/navcoind
+RUN cp navcoin-cli /bin/navcoin-cli
 
 WORKDIR /
-
+VOLUME [ "/root/.navcoin4" ]
 #cleanup
 RUN rm -rf /tmp/*
-
+EXPOSE 44444 44440 44445
 ENTRYPOINT ["/bin/bash", "-c"]
